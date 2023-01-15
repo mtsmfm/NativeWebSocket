@@ -450,7 +450,7 @@ namespace NativeWebSocket
             m_TokenSource?.Cancel();
         }
 
-        public async Task Connect()
+        public async Task Connect(bool awaitIntialResponse = true)
         {
             try
             {
@@ -471,7 +471,9 @@ namespace NativeWebSocket
                 await m_Socket.ConnectAsync(uri, m_CancellationToken);
                 OnOpen?.Invoke();
 
-                await Receive();
+                if (awaitIntialResponse) {
+                    await Receive();
+                }
             }
             catch (Exception ex)
             {
