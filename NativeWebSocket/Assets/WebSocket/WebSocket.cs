@@ -450,11 +450,11 @@ namespace NativeWebSocket
             m_TokenSource?.Cancel();
         }
 
-        public async Task Connect()
+        public async Task Connect(CancellationToken cancellation = default)
         {
             try
             {
-                m_TokenSource = new CancellationTokenSource();
+                m_TokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
                 m_CancellationToken = m_TokenSource.Token;
 
                 m_Socket = new ClientWebSocket();
@@ -657,7 +657,7 @@ namespace NativeWebSocket
                             result = await m_Socket.ReceiveAsync(buffer, m_CancellationToken);
                             ms.Write(buffer.Array, buffer.Offset, result.Count);
                         }
-                        while (!result.EndOfMessage);
+                        while (!result.EndOfMessage && !m_CancellationToken.IsCancellationRequested);
 
                         ms.Seek(0, SeekOrigin.Begin);
 
