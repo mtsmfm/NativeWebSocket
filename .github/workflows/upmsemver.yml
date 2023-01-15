@@ -3,7 +3,10 @@ name: Update Unity UPM semantic versioning
 on:
   push:
     branches:
-      - master
+      - fork
+
+permissions:
+  contents: write
 
 jobs:
   checkSemver:
