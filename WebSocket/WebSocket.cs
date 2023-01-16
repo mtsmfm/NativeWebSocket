@@ -657,7 +657,7 @@ namespace NativeWebSocket
                             result = await m_Socket.ReceiveAsync(buffer, m_CancellationToken);
                             ms.Write(buffer.Array, buffer.Offset, result.Count);
                         }
-                        while (!result.EndOfMessage);
+                        while (!result.EndOfMessage && !m_CancellationToken.IsCancellationRequested);
 
                         ms.Seek(0, SeekOrigin.Begin);
 
